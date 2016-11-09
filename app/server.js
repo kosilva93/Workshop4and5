@@ -56,7 +56,8 @@ export function postComment(feedItemId, author, contents, cb) {
   feedItem.comments.push({
     "author": author,
     "contents": contents,
-    "postDate": new Date().getTime()
+    "postDate": new Date().getTime(),
+    "likeCounter": []
   });
 
   writeDocument('feedItems', feedItem);
@@ -86,3 +87,23 @@ export function unlikeFeedItem(feedItemId, userId, cb) {
   emulateServerReturn(feedItem.likeCounter.map((userId) =>
   readDocument('users', userId)), cb);
 }
+
+export function likePost(feedItemId, comment, userId, cb) {
+  var feedItem = readDocument('feedItems', feedItemId);
+
+  feedItem.comments[comment].postLikes.push(userId)
+
+  writeDocument('feedItems', feedItem);
+
+  emulateServerReturn(feedItem.comments[comment].postLikes.map((userId) =>
+  readDocument('users', userId)), cb);
+ }
+
+ export function disLikePost(feedItemId, comment, userId, cb) {
+   var feedItem = readDocument('feedItems', feedItemId);
+   feedItem.comments[comment].likeCounter = feedItem.comments[comment].likeCounter.filter(function(e) { return e !== userId })
+
+   writeDocument('feedItems', feedItem);
+   emulateServerReturn(feedItem.comments[comment].likeCounter.map((userId) =>
+   readDocument('users', userId)), cb);
+ }

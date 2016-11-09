@@ -112,9 +112,9 @@ export default class FeedItem extends React.Component {
             {
             data.comments.map((comment, i) => {
               return (
-                <Comment key={i} author={comment.author}
-                  postDate={comment.postDate}>
-                  {comment.contents}
+                <Comment key={i} author={comment.author} postDate={comment.postDate}
+                  postNum={i} itemId={this.state._id} likeCounter={comment.likeCounter}>
+                   {comment.contents}
                 </Comment>
               );
             })
